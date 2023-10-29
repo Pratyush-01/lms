@@ -9,10 +9,10 @@ import { IconBadge } from "@/components/icon-badge";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
-// import { CategoryForm } from "./_components/category-form";
-// import { PriceForm } from "./_components/price-form";
-// import { AttachmentForm } from "./_components/attachment-form";
-// import { ChaptersForm } from "./_components/chapters-form";
+import { CategoryForm } from "./_components/category-form";
+import { PriceForm } from "./_components/price-form";
+import { AttachmentForm } from "./_components/attachment-form";
+import { ChaptersForm } from "./_components/chapters-form";
 // import { Actions } from "./_components/actions";
 
 const CourseIdPage = async ({
@@ -31,26 +31,26 @@ const CourseIdPage = async ({
             id: params.courseId,
             userId
         },
-        // include: {
-        //   chapters: {
-        //     orderBy: {
-        //       position: "asc",
-        //     },
-        //   },
-        //   attachments: {
-        //     orderBy: {
-        //       createdAt: "desc",
-        //     },
-        //   },
-        // },
+        include: {
+          chapters: {
+            orderBy: {
+              position: "asc",
+            },
+          },
+          attachments: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+        },
     });
 
-    //   const categories = await db.category.findMany({
-    //     orderBy: {
-    //       name: "asc",
-    //     },
-    //   });
-
+      const categories = await db.category.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      });
+      
     if (!course) {
         return redirect("/");
     }
@@ -61,7 +61,7 @@ const CourseIdPage = async ({
         course.imageUrl,
         course.price,
         course.categoryId,
-        //course.chapters.some(chapter => chapter.isPublished),
+        course.chapters.some(chapter => chapter.isPublished),
     ];
 
     const totalFields = requiredFields.length;
@@ -114,14 +114,14 @@ const CourseIdPage = async ({
                         initialData={course}
                         courseId={course.id}
                         />
-                        {/* <CategoryForm
+                        <CategoryForm
                         initialData={course}
                         courseId={course.id}
                         options={categories.map((category) => ({
                             label: category.name,
                             value: category.id,
                         }))}
-                        /> */}
+                        />
                     </div>
                     <div className="space-y-6">
                         <div>
@@ -131,10 +131,10 @@ const CourseIdPage = async ({
                                     Course chapters
                                 </h2>
                             </div>
-                            {/* <ChaptersForm
+                            <ChaptersForm
                 initialData={course}
                 courseId={course.id}
-              /> */}
+              />
                         </div>
                         <div>
                             <div className="flex items-center gap-x-2">
@@ -143,10 +143,10 @@ const CourseIdPage = async ({
                                     Sell your course
                                 </h2>
                             </div>
-                            {/* <PriceForm
-                initialData={course}
+                            <PriceForm
+                 initialData={course}
                 courseId={course.id}
-              /> */}
+              />
                         </div>
                         <div>
                             <div className="flex items-center gap-x-2">
@@ -155,10 +155,10 @@ const CourseIdPage = async ({
                                     Resources & Attachments
                                 </h2>
                             </div>
-                            {/* <AttachmentForm
+                            <AttachmentForm
                 initialData={course}
                 courseId={course.id}
-              /> */}
+              />
                         </div>
                     </div>
                 </div>
